@@ -1,0 +1,32 @@
+{
+  "relationship_definitions": [
+    {
+      "type": "FOLLOW_UP",
+      "description": "A segment directly follows or addresses attention items or actions mentioned in another segment."
+    },
+    {
+      "type": "CAUSAL",
+      "description": "The event described in one segment is directly caused by or results from another segment."
+    },
+    {
+      "type": "TOPICAL_CONTINUATION",
+      "description": "A segment continues discussing the same main topic or expands on significant subtopics previously introduced."
+    },
+    {
+      "type": "CONTRAST",
+      "description": "Two segments contrast sharply, e.g., present opposing viewpoints or contradictory information."
+    },
+    {
+      "type": "CLARIFICATION",
+      "description": "A segment clarifies, corrects, or elaborates on unclear or incomplete information from another segment."
+    },
+    {
+      "type": "REFERENCE",
+      "description": "A segment explicitly references people, events, or content previously discussed."
+    },
+    {
+      "type": "BACKGROUND",
+      "description": "A segment provides important context or background information that helps interpret another segment."
+    }
+  ]
+}

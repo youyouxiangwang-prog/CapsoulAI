@@ -1,0 +1,553 @@
+{
+  "Everyday Life": {
+    "description": "Covers informal conversations in daily life, such as within families, between friends, or while managing everyday tasks. Tone is usually casual and spontaneous.",
+    "core_purpose": "Handle personal tasks, maintain relationships, manage routine life",
+    "info": {
+      "useful": [
+        "Requests",
+        "Time coordination",
+        "Emotional sharing",
+        "Task arrangements"
+      ],
+      "noise": [
+        "Filler words",
+        "Small talk",
+        "Interruptions",
+        "Topic drift",
+        "Redundancy"
+      ]
+    },
+    "attention_items": [
+      "Grocery lists",
+      "Meal planning",
+      "School drop-off times",
+      "Visiting relatives"
+    ],
+    "subcategories": {
+      "Intra-family": {
+        "description": "Conversations among family members including parenting, caregiving, and household coordination.",
+        "core_purpose": "Support family function and emotional connection",
+        "info": {
+          "useful": [
+            "Chores",
+            "Child routines",
+            "Meal decisions",
+            "Health care needs"
+          ],
+          "noise": [
+            "Emotional outbursts",
+            "Nagging",
+            "Redundant warnings"
+          ]
+        },
+        "attention_items": [
+          "Medical appointments",
+          "Pickup times",
+          "Household duties"
+        ]
+      },
+      "Friends and Acquaintances": {
+        "description": "Informal social chat, including gossip, event updates, or casual bonding.",
+        "core_purpose": "Social bonding and peer support",
+        "info": {
+          "useful": [
+            "Plans",
+            "Updates",
+            "Recommendations"
+          ],
+          "noise": [
+            "Memes",
+            "Slang overuse",
+            "Off-topic humor"
+          ]
+        },
+        "attention_items": [
+          "Hangout time",
+          "Shared interests",
+          "Reminders for favors"
+        ]
+      },
+      "Daily Services": {
+        "description": "Interactions in stores, restaurants, or transportation.",
+        "core_purpose": "Get things done or receive services",
+        "info": {
+          "useful": [
+            "Product preferences",
+            "Service time",
+            "Cost"
+          ],
+          "noise": [
+            "Idle chit-chat",
+            "Ambient noise",
+            "Repeated promotions"
+          ]
+        },
+        "attention_items": [
+          "Order confirmation",
+          "Pickup time",
+          "Route instructions"
+        ]
+      },
+      "Public Services": {
+        "description": "Interactions in banks, hospitals, or city services regarding procedures or documentation.",
+        "core_purpose": "Access or understand public or administrative services",
+        "info": {
+          "useful": [
+            "Paperwork steps",
+            "Required documents",
+            "Office hours"
+          ],
+          "noise": [
+            "Complaints from others",
+            "Unrelated questions",
+            "Ambient announcements"
+          ]
+        },
+        "attention_items": [
+          "Appointment time",
+          "Application status",
+          "Document checklist"
+        ]
+      }
+    }
+  },
+  "Workplace & Organizational": {
+    "description": "Goal-oriented conversations in professional settings. Tone is formal or semi-formal, focusing on task execution and coordination.",
+    "core_purpose": "Collaborate, coordinate, report, make decisions",
+    "info": {
+      "useful": [
+        "Deadlines",
+        "Task updates",
+        "Action plans",
+        "Role assignments"
+      ],
+      "noise": [
+        "Corporate buzzwords",
+        "Redundant status updates",
+        "Off-topic chatting"
+      ]
+    },
+    "attention_items": [
+      "Project timelines",
+      "Meeting agendas",
+      "To-do lists",
+      "Resource requests"
+    ],
+    "subcategories": {
+      "Internal Communication": {
+        "description": "Dialogue between colleagues for updates, alignment, and task tracking.",
+        "core_purpose": "Ensure team alignment and progress tracking",
+        "info": {
+          "useful": [
+            "Status updates",
+            "Feedback",
+            "Milestone check-ins"
+          ],
+          "noise": [
+            "Polite fillers",
+            "Repeated questions"
+          ]
+        },
+        "attention_items": [
+          "Follow-ups",
+          "Blocked tasks",
+          "Deadline adjustments"
+        ]
+      },
+      "External Collaboration": {
+        "description": "Interactions with clients, vendors, or partners around deals, deliverables, and negotiations.",
+        "core_purpose": "Drive business objectives and fulfill agreements",
+        "info": {
+          "useful": [
+            "Contracts",
+            "Delivery terms",
+            "Pricing discussions"
+          ],
+          "noise": [
+            "Excessive pleasantries",
+            "Overused sales language"
+          ]
+        },
+        "attention_items": [
+          "Milestone dates",
+          "Invoice schedules",
+          "Responsibilities"
+        ]
+      },
+      "Talent & HR": {
+        "description": "Conversations around hiring, onboarding, feedback, or exit interviews.",
+        "core_purpose": "Evaluate, train, or retain human resources",
+        "info": {
+          "useful": [
+            "Skills",
+            "Performance issues",
+            "Expectations"
+          ],
+          "noise": [
+            "Cliché self-descriptions",
+            "Corporate speak"
+          ]
+        },
+        "attention_items": [
+          "Start dates",
+          "Review schedules",
+          "Coaching plans"
+        ]
+      },
+      "Service Operations": {
+        "description": "Logistics and coordination in customer-facing roles like hospitality or retail.",
+        "core_purpose": "Deliver quality service and solve issues",
+        "info": {
+          "useful": [
+            "Customer requests",
+            "Booking details",
+            "Shift scheduling"
+          ],
+          "noise": [
+            "Idle gossip",
+            "Personal chat at work"
+          ]
+        },
+        "attention_items": [
+          "Guest preferences",
+          "Staff coverage",
+          "Event timelines"
+        ]
+      }
+    }
+  },
+  "Expert & High-Stakes": {
+    "description": "Professional, technical, or regulated dialogues requiring precision and expertise.",
+    "core_purpose": "Provide specialized advice, resolve critical issues, ensure compliance",
+    "info": {
+      "useful": [
+        "Technical data",
+        "Guidelines",
+        "Procedures",
+        "Legal clauses"
+      ],
+      "noise": [
+        "Misinformation",
+        "Jargon misuse",
+        "Unclear risk language"
+      ]
+    },
+    "attention_items": [
+      "Treatment schedules",
+      "Legal appointments",
+      "Financial deadlines"
+    ],
+    "subcategories": {
+      "Medical": {
+        "description": "Doctor-patient or caregiver conversations on diagnosis, treatment, or care.",
+        "core_purpose": "Deliver and explain medical care",
+        "info": {
+          "useful": [
+            "Symptoms",
+            "Medication",
+            "Follow-up instructions"
+          ],
+          "noise": [
+            "Anecdotes",
+            "Emotional distractions"
+          ]
+        },
+        "attention_items": [
+          "Prescription refills",
+          "Surgery dates",
+          "Monitoring reminders"
+        ]
+      },
+      "Legal & Law Enforcement": {
+        "description": "Dialogues involving legal counsel, police questioning, or court proceedings.",
+        "core_purpose": "Establish facts, determine liability, enforce rights",
+        "info": {
+          "useful": [
+            "Statements",
+            "Timeline of events",
+            "Legal arguments"
+          ],
+          "noise": [
+            "Outbursts",
+            "Repetitive denials"
+          ]
+        },
+        "attention_items": [
+          "Court dates",
+          "Evidence list",
+          "Case deadlines"
+        ]
+      },
+      "Education & Training": {
+        "description": "Teacher-student or trainer-learner conversations on knowledge transfer.",
+        "core_purpose": "Teach, reinforce understanding, give feedback",
+        "info": {
+          "useful": [
+            "Concept clarification",
+            "Assignments",
+            "Performance tips"
+          ],
+          "noise": [
+            "Interruptions",
+            "Disinterest"
+          ]
+        },
+        "attention_items": [
+          "Due dates",
+          "Tutoring sessions",
+          "Assessment prep"
+        ]
+      },
+      "Finance & Insurance": {
+        "description": "Advisory or claims-related dialogue in financial institutions.",
+        "core_purpose": "Protect assets, plan finances, manage risk",
+        "info": {
+          "useful": [
+            "Terms and conditions",
+            "Coverage details",
+            "Payout procedures"
+          ],
+          "noise": [
+            "Upsell jargon",
+            "Ambiguous rates"
+          ]
+        },
+        "attention_items": [
+          "Renewal dates",
+          "Payment schedules",
+          "Claim steps"
+        ]
+      },
+      "Technical & Engineering": {
+        "description": "Problem-solving among engineers, technicians, or IT operators.",
+        "core_purpose": "Diagnose and resolve technical issues",
+        "info": {
+          "useful": [
+            "Specs",
+            "Logs",
+            "Test results",
+            "Issue history"
+          ],
+          "noise": [
+            "Vague problem descriptions",
+            "Repetition"
+          ]
+        },
+        "attention_items": [
+          "Patch dates",
+          "Upgrade rollout",
+          "Root cause tracking"
+        ]
+      }
+    }
+  },
+  "Digital & Human-Machine": {
+    "description": "Conversations in virtual environments or between humans and AI systems.",
+    "core_purpose": "Assist users, retrieve information, enable interaction",
+    "info": {
+      "useful": [
+        "Commands",
+        "Queries",
+        "Instructions",
+        "Device feedback"
+      ],
+      "noise": [
+        "Wake word repetition",
+        "Misunderstood prompts",
+        "Latency artifacts"
+      ]
+    },
+    "attention_items": [
+      "Reminders",
+      "Settings",
+      "Summarized outputs"
+    ],
+    "subcategories": {
+      "Social Media Chat": {
+        "description": "Conversational messages via DM, comments, or forums.",
+        "core_purpose": "Engage socially, express opinions, maintain online presence",
+        "info": {
+          "useful": [
+            "Event invites",
+            "Mood updates",
+            "Relationship signals"
+          ],
+          "noise": [
+            "Spam",
+            "Inside jokes",
+            "Memes"
+          ]
+        },
+        "attention_items": [
+          "RSVPs",
+          "Shared content",
+          "Follow-up tags"
+        ]
+      },
+      "Gaming & Virtual Worlds": {
+        "description": "In-game coordination and role-play among players.",
+        "core_purpose": "Achieve goals in digital games or simulations",
+        "info": {
+          "useful": [
+            "Strategy talk",
+            "Resource sharing",
+            "Task coordination"
+          ],
+          "noise": [
+            "Trash talk",
+            "Audio clutter"
+          ]
+        },
+        "attention_items": [
+          "Match time",
+          "Team actions",
+          "Level-up criteria"
+        ]
+      },
+      "AI & Smart Assistants": {
+        "description": "Interaction with intelligent systems or home devices via voice or text.",
+        "core_purpose": "Trigger actions, ask for help, automate tasks",
+        "info": {
+          "useful": [
+            "Commands",
+            "System response",
+            "Confirmation"
+          ],
+          "noise": [
+            "Repeat triggers",
+            "Natural language ambiguity"
+          ]
+        },
+        "attention_items": [
+          "Alarm times",
+          "Playlist choices",
+          "Device schedules"
+        ]
+      },
+      "Content Creation": {
+        "description": "Podcasts, interviews, or co-creation talks during media production.",
+        "core_purpose": "Plan or generate media content collaboratively",
+        "info": {
+          "useful": [
+            "Segment outlines",
+            "Script notes",
+            "Feedback"
+          ],
+          "noise": [
+            "Retakes",
+            "Pre-roll chatter"
+          ]
+        },
+        "attention_items": [
+          "Recording time",
+          "Editing markers",
+          "Publishing calendar"
+        ]
+      }
+    }
+  },
+  "Cross-Context & Hybrid": {
+    "description": "Multifaceted scenarios where work, family, legal, or emotional topics overlap. Often fast-changing and emotionally loaded.",
+    "core_purpose": "Navigate overlapping responsibilities and resolve multi-role conflicts",
+    "info": {
+      "useful": [
+        "Scheduling overlaps",
+        "Caregiver roles",
+        "Work/life tradeoffs"
+      ],
+      "noise": [
+        "Role confusion",
+        "Distractions",
+        "Emotional spikes"
+      ]
+    },
+    "attention_items": [
+      "Multi-stakeholder planning",
+      "Conflict notes",
+      "Family + job calendars"
+    ],
+    "subcategories": {
+      "Work-from-Home Conflicts": {
+        "description": "Remote work interfered with by family or household needs.",
+        "core_purpose": "Balance job focus with home responsibilities",
+        "info": {
+          "useful": [
+            "Meeting times",
+            "Family requests",
+            "Task switching"
+          ],
+          "noise": [
+            "Interruptions",
+            "Children's noise"
+          ]
+        },
+        "attention_items": [
+          "Quiet time slots",
+          "Childcare arrangements",
+          "Break scheduling"
+        ]
+      },
+      "Medical Care + Family Planning": {
+        "description": "Joint discussions about elder care, child illness, or medical appointments.",
+        "core_purpose": "Make informed, compassionate health decisions together",
+        "info": {
+          "useful": [
+            "Doctor feedback",
+            "Caretaking shifts",
+            "Next steps"
+          ],
+          "noise": [
+            "Blame",
+            "Guilt trips",
+            "Memory conflicts"
+          ]
+        },
+        "attention_items": [
+          "Hospital visits",
+          "Medication times",
+          "Care schedule"
+        ]
+      },
+      "Emotional + Educational": {
+        "description": "Where education discussions (teacher/parent) blend with behavior/emotional issues.",
+        "core_purpose": "Address learning challenges and emotional wellbeing",
+        "info": {
+          "useful": [
+            "Behavior reports",
+            "Support plans",
+            "Academic tracking"
+          ],
+          "noise": [
+            "Finger-pointing",
+            "Exaggerations"
+          ]
+        },
+        "attention_items": [
+          "Parent-teacher meetings",
+          "Behavioral interventions",
+          "Tutoring"
+        ]
+      },
+      "Legal + Workplace": {
+        "description": "Employee/employer disputes, legal consultation, or HR investigations.",
+        "core_purpose": "Protect rights, resolve disputes, follow protocol",
+        "info": {
+          "useful": [
+            "Evidence",
+            "Policy references",
+            "Case statements"
+          ],
+          "noise": [
+            "Drama",
+            "Overgeneralizations"
+          ]
+        },
+        "attention_items": [
+          "Hearing dates",
+          "Legal deadlines",
+          "Document checklists"
+        ]
+      }
+    }
+  }
+}
