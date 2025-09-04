@@ -87,8 +87,7 @@ class ConversationService:
         chain(
             transcription_tasks.process_audio.s(audio.id),
             analysis_tasks.process_segments_analysis.si(audio.id),
-            analysis_tasks.process_conversation_analysis.si(audio.id),
-            graph_tasks.process_graph.si(str(tenant_id))
+            analysis_tasks.process_conversation_analysis.si(audio.id)
         ).apply_async()
         return {
             "ok": True,

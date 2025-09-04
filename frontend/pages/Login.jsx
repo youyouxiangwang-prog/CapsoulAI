@@ -4,9 +4,13 @@ export default function Login() {
       VITE_API_HOST: import.meta.env.VITE_API_HOST,
       VITE_API_PORT: import.meta.env.VITE_API_PORT,
       VITE_API_BASE: import.meta.env.VITE_API_BASE})
-    const apiHost = import.meta.env.VITE_API_HOST;
-    const apiPort = import.meta.env.VITE_API_PORT;
-    window.location.href = `http://${apiHost}:${apiPort}/api/v1/auth/google/login`;
+
+    const baseUrl = window.location.origin; 
+    // 拼接成一个完整的、公共的URL
+    const googleLoginUrl = `${baseUrl}/api/v1/auth/google/login`;
+    window.location.href = googleLoginUrl;
+  
+    // 让页面跳转到这个地址
     console.log("Redirecting to:", window.location.href);
   }
 

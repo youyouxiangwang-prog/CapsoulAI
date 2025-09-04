@@ -7,35 +7,9 @@ from app.workers.algos.preprocess_audio import preprocess_audio, remap_segments_
 from app.core.database import SessionLocal
 import os
 import requests
+import time
 from datetime import timedelta
 from app.crud.crud_tenant import crud_tenant
-
-@celery_app.task
-def process_transcription(conversation_id: int):
-    """异步执行音频转录"""
-    try:
-        # TODO: 实现转录逻辑
-        # 1. 获取对话记录
-        # 2. 调用转录服务
-        # 3. 保存转录结果
-        # 4. 更新状态
-        # 5. 触发分析任务
-        
-        print(f"Processing transcription for conversation {conversation_id}")
-        
-        # 模拟转录处理
-        transcription_service = TranscriptionService()
-        # result = await transcription_service.request_transcription(source_path)
-        
-        # 触发分析任务
-        from app.workers.tasks.analysis_tasks import process_segments_analysis
-        process_segments_analysis.delay(conversation_id)
-        
-        return {"status": "completed", "conversation_id": conversation_id}
-        
-    except Exception as e:
-        print(f"Transcription failed for conversation {conversation_id}: {str(e)}")
-        return {"status": "failed", "error": str(e)}
 
 @celery_app.task
 def process_audio(audio_id: int):
@@ -62,7 +36,7 @@ def process_audio(audio_id: int):
 
         # === (2) 调用转录服务 ===
         print(f"Transcribing audio: {preproc_path}")
-        segments, embeddings = whisperx_transcribe(preproc_path)
+        segments = transcribe(preproc_path)
 
         # === (3) 将转录结果的时间戳映射回原始音频时间轴 ===
         segments = remap_segments_to_original_timeline(segments, mapping)
@@ -114,15 +88,77 @@ def process_audio(audio_id: int):
             pass
         db.close()
 
-def whisperx_transcribe(audio_path: str):
-    files={"file": open(audio_path, "rb")}
-    url = "http://10.183.155.10:5525/transcribe"
-    response = requests.post(
-        url,
-        files={"file": open(audio_path, "rb")},
-        data={"batch_size": 16, "diarize": "true", "return_char_alignments": "false"}
-    )
-    print(f"response",response)
-    result = response.json()
- 
-    return result["segments"], result["embeddings"]
+def transcribe(audio_path: str):
+    backend = os.getenv("TRANSCRIBE_BACKEND", "WHISPERX").upper() # WHISPERX or ASSEMBLYAI
+    print(f"Using transcription backend: {backend}")
+
+    if backend == "WHISPERX":
+        url = os.getenv("WHISPERX_URL") # "http://10.183.155.10:5525/transcribe"
+        response = requests.post(
+            url,
+            files={"file": open(audio_path, "rb")},
+            data={"batch_size": 16, "diarize": "true", "return_char_alignments": "false"}
+        )
+        result = response.json()
+        return result["segments"]
+    elif backend == "ASSEMBLYAI":
+        base_url = os.getenv("ASSEMBLYAI_URL")   # "https://api.assemblyai.com"
+        api_key = os.getenv("ASSEMBLYAI_API_KEY") # "4f65babe18ad449ab666849fb26eab4b"
+        if not api_key:
+            raise RuntimeError("ASSEMBLYAI_API_KEY is required for ASSEMBLYAI backend")
+        headers = {"authorization": api_key}
+        # 1. upload file for transcription
+        with open(audio_path, "rb") as f:
+            response = requests.post(
+                url=base_url + "/v2/upload",
+                headers=headers,
+                data=f
+            )
+        # 2. get transcript id
+        upload_url = response.json()["upload_url"]
+        data = {
+            "audio_url": upload_url,
+            "speaker_labels": True,
+            "language_detection": True,
+            "punctuate": True,
+            "format_text": True,
+            "speech_model": "universal"
+        }
+        response = requests.post(
+            url=base_url + "/v2/transcript",
+            json=data,
+            headers=headers
+        )
+        transcript_id = response.json()['id']
+        # 3. get transcript
+        start_ts = time.time()
+        while True:
+            results = requests.get(
+                url=base_url + "/v2/transcript/" + transcript_id,
+                headers=headers
+            ).json()
+            if results['status'] == 'completed':
+                print(f"Transcript ID:{transcript_id}")
+                utterances = results.get('utterances', [])
+                return _assembly_utterances_to_segments(utterances)
+            elif results['status'] == 'error':
+                raise RuntimeError(f"Transcription failed: {results['error']}")
+            if time.time() - start_ts > 600:
+                raise TimeoutError(f"Polling timed out after 300 seconds (id={transcript_id})")
+            time.sleep(1)
+
+def _assembly_utterances_to_segments(utterances):
+    """
+    将 AssemblyAI 的 utterances 时间戳转换为 ms。
+    """
+    segments = []
+    for u in utterances:
+        words = u.get("words", [])
+        for w in words:
+            w["start"] = w["start"] / 1000.0 if w.get("start") is not None else None
+            w["end"] = w["end"] / 1000.0 if w.get("end") is not None else None
+        u["start"] = u.get("start") / 1000.0 if u.get("start") is not None else None
+        u["end"] = u.get("end") / 1000.0 if u.get("end") is not None else None
+        segments.append(u)
+    return segments
+

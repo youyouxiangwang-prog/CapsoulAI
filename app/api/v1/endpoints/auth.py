@@ -86,9 +86,13 @@ async def test_redirect():
 async def google_login():
     """跳转到Google OAuth2授权页面"""
     client_id = "1016666660738-4q0tqnt46a9sga8jsrpudtmpltf7gqup.apps.googleusercontent.com"
-    frontend_port = os.getenv("VITE_PORT", "5175")
-    redirect_uri = f"http://localhost:{frontend_port}/auth/google/callback"
-    print("[Google OAuth] Step: /google/login called")
+    frontend_domain = os.getenv("VITE_PUBLIC_DOMAIN", "localhost")
+
+    # Ensure frontend_domain includes protocol
+    if not frontend_domain.startswith("http://") and not frontend_domain.startswith("https://"):
+        frontend_domain = f"http://{frontend_domain}"
+
+    redirect_uri = f"{frontend_domain}/api/v1/auth/google/callback"
     print(f"[Google OAuth] redirect_uri for Google: {redirect_uri}")
     scope = "openid email profile"
     state = "random_state_string"
@@ -105,7 +109,7 @@ async def google_login():
     print("result:",result.status_code, result.headers)
     return result
 
-# --- 【【 THIS IS THE MODIFIED FUNCTION 】】 ---
+# --- 【【 THIS IS THE MODIFIED FUNCTION 】】---
 @router.get("/google/callback")
 async def google_callback(code: str):
     """
@@ -113,8 +117,14 @@ async def google_callback(code: str):
     """
     client_id = "1016666660738-4q0tqnt46a9sga8jsrpudtmpltf7gqup.apps.googleusercontent.com"
     client_secret = "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"
-    frontend_port = os.getenv("VITE_PORT", "5175")
-    redirect_uri = f"http://localhost:{frontend_port}/auth/google/callback"
+    frontend_domain = os.getenv("VITE_PUBLIC_DOMAIN", "localhost")
+
+    # Ensure frontend_domain includes protocol
+    if not frontend_domain.startswith("http://") and not frontend_domain.startswith("https://"):
+        frontend_domain = f"http://{frontend_domain}"
+
+    redirect_uri = f"{frontend_domain}/api/v1/auth/google/callback"
+    print(f"[Google OAuth] redirect_uri for Google callback: {redirect_uri}")
 
     # 1. 用code换取access_token
     token_url = "https://oauth2.googleapis.com/token"
@@ -165,12 +175,10 @@ async def google_callback(code: str):
     refresh_jwt = create_refresh_token(subject=str(tenant.id))
     print(f"[Google OAuth] Tenant authenticated via API, returning JWT: {local_jwt}")
 
-    # 5. 【核心修改】不再返回重定向，而是返回一个 JSON 响应！
-    response = JSONResponse(content={
-        "access_token": local_jwt,
-        "token_type": "bearer"
-    })
-    
+    # 5. 【核心修改】重定向到前端页面，附带 access_token
+    redirect_url = f"{frontend_domain}/memories?access_token={local_jwt}"
+    response = RedirectResponse(url=redirect_url)
+
     # 仍然通过 cookie 来安全地设置 refresh_token
     response.set_cookie(
         key="rt",
