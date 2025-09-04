@@ -176,7 +176,7 @@ frontend-build:
 
 frontend-dev:
 	@echo "启动前端开发服务器..."
-	cd frontend && \
+	@cd frontend && \
 	if [ -f ../.env ]; then \
 		echo "Using env: ../.env"; \
 		set -a; . ../.env; set +a; \
@@ -188,7 +188,7 @@ frontend-dev:
 		set -a; . ../.env.development; set +a; \
 	fi; \
 	echo "VITE_API_PORT from shell: $$VITE_API_PORT"; \
-	VITE_PORT="$${VITE_PORT:-5175}" npm run dev -- --port "$${VITE_PORT:-5175}"
+	VITE_PORT="$${VITE_PORT:-80}" npm run dev -- --port $${VITE_PORT:-80} --no-open
 
 celery:
 	@echo "启动Celery Worker..."
@@ -285,3 +285,4 @@ ssl-generate:
 		-keyout nginx/ssl/key.pem \
 		-out nginx/ssl/cert.pem \
 		-subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
+

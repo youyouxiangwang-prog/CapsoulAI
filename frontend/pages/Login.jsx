@@ -1,7 +1,11 @@
 export default function Login() {
   function loginWithGoogle() {
-    const apiHost = import.meta.env.VITE_API_HOST || "10.183.155.10";
-    const apiPort = import.meta.env.VITE_API_PORT || 8091;
+    console.log("environment variables:", {
+      VITE_API_HOST: import.meta.env.VITE_API_HOST,
+      VITE_API_PORT: import.meta.env.VITE_API_PORT,
+      VITE_API_BASE: import.meta.env.VITE_API_BASE})
+    const apiHost = import.meta.env.VITE_API_HOST;
+    const apiPort = import.meta.env.VITE_API_PORT;
     window.location.href = `http://${apiHost}:${apiPort}/api/v1/auth/google/login`;
     console.log("Redirecting to:", window.location.href);
   }
@@ -83,3 +87,4 @@ export default function Login() {
     </div>
   );
 }
+
