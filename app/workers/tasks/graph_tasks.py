@@ -5,7 +5,7 @@ import json
 # Add the parent directory to sys.path to resolve the module import issue
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.utils.openai_chat import chat_with_azure_openai
+from app.utils.llm_selector import chat_with_llm
 from sqlalchemy.orm import Session
 from app.schemas.relationship import Relationship
 from app.schemas.base import Base
@@ -140,7 +140,7 @@ def match_isolated_with_groups(db: Session, unanalysed_segments, groups):
         for group in groups:
             # Generate a prompt for the LLM
             prompt = generate_llm_prompt(segment, group)
-            response = chat_with_azure_openai(prompt)
+            response = chat_with_llm(prompt, response_format={"type": "json_object"})
             print(f"LLM response for segment {segment['id']}: {response}")
             # Parse the LLM response to extract relationships
             related_segments_with_direction, relationship_type = parse_llm_response_with_relationship(response)

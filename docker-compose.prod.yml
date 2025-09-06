@@ -69,17 +69,15 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     container_name: capsoulai-web-prod
+    env_file:
+      - .env.prod
     environment:
-      APP_NAME: ${APP_NAME:-CapsoulAI API}
-      APP_VERSION: ${APP_VERSION:-1.0.0}
-      DEBUG: "false"
-      ENVIRONMENT: production
-      DATABASE_URL: postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
-      RECORDINGS_DIR: /app/uploads
-      SECRET_KEY: ${SECRET_KEY}
-      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-'["https://yourdomain.com"]'}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - RECORDINGS_DIR=/app/uploads
+      - ENVIRONMENT=production
+      - DEBUG=false
     volumes:
       - upload_prod_data:/app/uploads
       - app_logs:/app/logs
@@ -116,12 +114,14 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     command: celery -A app.workers.celery_app worker --loglevel=info --concurrency=4 --hostname=worker@%h
+    env_file:
+      - .env.prod
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
-      RECORDINGS_DIR: /app/uploads
-      CELERY_WORKER_NAME: ${CELERY_WORKER_NAME:-prod-worker}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - RECORDINGS_DIR=/app/uploads
+      - CELERY_WORKER_NAME=${CELERY_WORKER_NAME:-prod-worker}
     volumes:
       - upload_prod_data:/app/uploads
       - app_logs:/app/logs
@@ -134,14 +134,13 @@ services:
     networks:
       - capsoulai-prod
     deploy:
-      replicas: 2
       resources:
         limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
           memory: 512M
           cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
     logging:
       driver: "json-file"
       options:
@@ -154,11 +153,13 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     command: celery -A app.workers.celery_app beat --loglevel=info
+    env_file:
+      - .env.prod
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
-      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
-      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
-      RECORDINGS_DIR: /app/uploads
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-capsoulai_prod_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-capsoulai_prod}
+      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - RECORDINGS_DIR=/app/uploads
     volumes:
       - upload_prod_data:/app/uploads
       - celery_beat_prod_data:/app/celerybeat-schedule

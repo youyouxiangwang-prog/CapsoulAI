@@ -9,7 +9,7 @@ AZURE_OPENAI_API_KEY = settings.AZURE_OPENAI_API_KEY
 AZURE_OPENAI_DEPLOYMENT = settings.AZURE_OPENAI_DEPLOYMENT
 API_VERSION = settings.AZURE_OPENAI_API_VERSION
 
-import app.utils.openai_chat as openai_chat
+import app.utils.qianwen_chat as openai_chat
 
 client = client = openai.AzureOpenAI(
     api_key=AZURE_OPENAI_API_KEY,
@@ -29,7 +29,7 @@ def count_tokens(text, model=None):
         enc = tiktoken.get_encoding("cl100k_base")
     return len(enc.encode(text))
 
-def chat_with_azure_openai(prompt, temperature=0.7, max_tokens=16000,response_format={"type": "json_object"}, system_content="You are a dialogue analysis expert. You need to reply the answer always in JSON format"):
+def chat_with_openai(prompt, temperature=0.7, max_tokens=16000,response_format={"type": "json_object"}, system_content="You are a dialogue analysis expert. You need to reply the answer always in JSON format"):
     global LLM_TOTAL_INPUT_TOKENS, LLM_TOTAL_OUTPUT_TOKENS
     response = client.chat.completions.create(
         model=AZURE_OPENAI_DEPLOYMENT,
@@ -62,5 +62,5 @@ def reset_llm_token_stats():
 
 if __name__ == "__main__":
     prompt = """ How are you? """
-    answer = chat_with_azure_openai(prompt)
+    answer = chat_with_openai(prompt)
     print(answer)

@@ -7,7 +7,7 @@ import logging
 from app.models.moment import MomentRead, GeneratedSummary, FilterRequest, RecommendationRequest
 from app.services.analysis_service import AnalysisService
 from app.schemas import Conversation, Segment, Task, Note, Schedule, Reminder, Line
-from app.utils.openai_chat import chat_with_azure_openai
+from app.utils.llm_selector import chat_with_llm
 from app.crud.crud_segment import crud_segment
 from app.crud.crud_task import crud_task
 from app.crud.crud_note import crud_note
@@ -345,7 +345,7 @@ class MomentService:
             """
             
             try:
-                ai_response = chat_with_azure_openai(categorization_prompt, temperature=0.1)
+                ai_response = chat_with_qwen(categorization_prompt, temperature=0.1)
                 # Clean response like in retrieval_service
                 if "```json" in ai_response:
                     ai_response = ai_response.split("```json")[1].split("```")[0]
@@ -489,7 +489,7 @@ Positive moments: {'. '.join([line.text[:50] + '...' for line in meaningful_line
 Please write a warm, encouraging paragraph (maximum 120 words) that highlights the user's productivity, positive engagement, and meaningful connections. Focus on their achievements, growth, and relationships. Write in a supportive, personal tone as plain text without any formatting."""
             
             try:
-                recap = chat_with_azure_openai(recap_prompt, temperature=0.7)
+                recap = chat_with_qwen(recap_prompt, temperature=0.7)
                 # Clean any potential JSON formatting
                 recap_text = recap.strip()
                 if recap_text.startswith('"') and recap_text.endswith('"'):
@@ -620,7 +620,7 @@ Please write a warm, encouraging paragraph (maximum 120 words) that highlights t
             """
             
             try:
-                ai_response = chat_with_azure_openai(categorization_prompt, temperature=0.3)
+                ai_response = chat_with_qwen(categorization_prompt, temperature=0.3)
                 # Clean response like in retrieval_service
                 if "```json" in ai_response:
                     ai_response = ai_response.split("```json")[1].split("```")[0]
@@ -753,7 +753,7 @@ Please write a warm, encouraging paragraph (maximum 120 words) that highlights t
                 e.g. "I know that will be hard, but I decided to go for it. - Speaker A, 2025-08-26 20:55:29"
         """
 
-            selected_line = chat_with_azure_openai(ai_prompt, temperature=0.7,
+            selected_line = chat_with_qwen(ai_prompt, temperature=0.7,
             response_format={"type": "text"},system_content="").strip()
 
             # Ensure the output is clean and formatted correctly

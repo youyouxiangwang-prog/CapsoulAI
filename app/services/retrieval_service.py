@@ -5,7 +5,7 @@ This module provides a clean interface for querying the knowledge graph with anc
 
 import json
 from sqlalchemy.orm import Session
-from app.utils.openai_chat import chat_with_azure_openai
+from app.utils.llm_selector import chat_with_llm
 from app.models.moment import Node, Edge, SearchResult
 from app.schemas import Segment, Task, Note, Schedule, Reminder, Conversation, Line
 from app.utils.schema_generator import generate_schema_description
@@ -116,7 +116,7 @@ class Planner:
         prompt = f"{system_prompt}\n\nUser Question: \"{user_input}\"\n\nYour JSON Output:"
 
         try:
-            content = chat_with_azure_openai(prompt, temperature=0.0)
+            content = chat_with_qwen(prompt, temperature=0.0)
             # Clean the response to get only the JSON
             if "```json" in content:
                 content = content.split("```json")[1].split("```")[0]
@@ -223,7 +223,7 @@ class Summarizer:
         Don't anwser in json which looks like a JSON object with keys like "summary", "events", "relationships", etc. Instead, provide a natural language summary that captures the essence of the query results without using structured JSON format.  
         ---
         """
-        return chat_with_azure_openai(prompt, temperature=0.0)
+        return chat_with_llm(prompt, temperature=0.0)
 
 class SearchAgent:
     """
@@ -923,7 +923,7 @@ class SegmentAncestryTracker:
         )
 
         print(f"Prompt for summarization: {prompt}")
-        summary = chat_with_azure_openai(prompt, temperature=0.0)
+        summary = chat_with_qwen(prompt, temperature=0.0)
         return summary
     
     def _generate_path_summary_for_entity(self, source_node, ancestry_path, related_segments, ancestry_path_items):
@@ -997,7 +997,7 @@ class SegmentAncestryTracker:
             Direct output the plain text summary:
             """
             
-            summary = chat_with_azure_openai(prompt, temperature=0.2,response_format={"type": "text"},system_content="")
+            summary = chat_with_qwen(prompt, temperature=0.2,response_format={"type": "text"},system_content="")
             
             # Clean the returned content to ensure it's plain text
             summary = summary.strip()

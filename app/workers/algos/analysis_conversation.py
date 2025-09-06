@@ -2,7 +2,7 @@
 import json
 import os
 import tiktoken
-from app.utils.openai_chat import chat_with_azure_openai
+from app.utils.llm_selector import chat_with_llm
 
 TAXONOMY_PATH = os.path.join(os.path.dirname(__file__), "dialogue_taxonomy_en_full.json")
 RELATION_PATH = os.path.join(os.path.dirname(__file__), "event_relationship.json")
@@ -519,7 +519,7 @@ def analyze_conversation_with_one_in_all(
     response = None
     parsed_response = None
     for retry in range(max_retry):
-        response = chat_with_azure_openai(prompt, temperature=temperature, max_tokens=max_tokens)
+        response = chat_with_qwen(prompt, temperature=temperature, max_tokens=max_tokens)
         try:
             parsed_response = json.loads(response)
         except Exception as e:
@@ -532,7 +532,7 @@ def analyze_conversation_with_one_in_all(
                     f"The original error was: {Error_Message}\n"
                     f"Content to fix:\n{response}"
                 )
-                fixed_response = chat_with_azure_openai(fix_prompt, temperature=0.1, max_tokens=max_tokens)
+                fixed_response = chat_with_qwen(fix_prompt, temperature=0.1, max_tokens=max_tokens)
                 try:
                     parsed_response = json.loads(fixed_response)
                     break
@@ -733,7 +733,7 @@ def analyze_conversation_summary(
     response = None
     parsed_response = None
     for retry in range(max_retry):
-        response = chat_with_azure_openai(prompt, temperature=temperature, max_tokens=max_tokens)
+        response = chat_with_qwen(prompt, temperature=temperature, max_tokens=max_tokens)
         try:
             parsed_response = json.loads(response)
             break
@@ -747,7 +747,7 @@ def analyze_conversation_summary(
                     f"The original error was: {Error_Message}\n"
                     f"Content to fix:\n{response}"
                 )
-                fixed_response = chat_with_azure_openai(fix_prompt, temperature=0.1, max_tokens=max_tokens)
+                fixed_response = chat_with_qwen(fix_prompt, temperature=0.1, max_tokens=max_tokens)
                 try:
                     parsed_response = json.loads(fixed_response)
                     break
